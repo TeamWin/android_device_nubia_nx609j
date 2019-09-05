@@ -101,6 +101,7 @@ TW_NEW_ION_HEAP := true
 TW_NO_USB_STORAGE := true
 TARGET_RECOVERY_DEVICE_MODULES := tzdata android.hidl.base@1.0
 TW_RECOVERY_ADDITIONAL_RELINK_FILES := $(OUT)/system/usr/share/zoneinfo/tzdata $(OUT)/system/lib64/android.hidl.base@1.0.so
+TW_USE_TOOLBOX := true
 
 # TWRP Debug Flags
 #TARGET_USES_LOGD := true
