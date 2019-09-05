@@ -15,4 +15,5 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/omni_NX609J.mk
+    $(LOCAL_DIR)/omni_nx609j.mk \
+    $(LOCAL_DIR)/nx609j_SAR/omni_nx609j_SAR.mk

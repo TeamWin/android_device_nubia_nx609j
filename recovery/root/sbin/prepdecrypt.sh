@@ -8,7 +8,7 @@ DEFAULTPROP=prop.default
 syspath="/dev/block/bootdevice/by-name/system"
 venbin="/vendor/bin"
 SETPATCH=false # only needed for vold decrypt
-SETDEVICE=false
+SETDEVICE=true
 SETFINGERPRINT=true
 
 log_info()
@@ -122,14 +122,14 @@ if [ -f "$TEMPSYS/$BUILDPROP" ]; then
 	# Only needed for some devices, so set "SETDEVICE" variable to "false" if your device isn't one of them
 	if [ "$SETDEVICE" = "true" ]; then
 		log_info "Current device: $device"
-		device=$(grep -i 'ro.product.device' "$TEMPSYS/$BUILDPROP"  | cut -f2 -d'=' -s)
+		device="NX609J"
 		if [ -n "$device" ]; then
 			resetprop ro.product.device "$device"
 			sed -i "s/ro.product.device=.*/ro.product.device=""$device""/g" "/$DEFAULTPROP" ;
 			log_info "New device: $device"
 		fi
 		log_info "Current product: $product"
-		product=$(grep -i 'ro.build.product' "$TEMPSYS/$BUILDPROP"  | cut -f2 -d'=' -s)
+		product="NX609J"
 		if [ -n "$product" ]; then
 			resetprop ro.build.product "$product"
 			sed -i "s/ro.build.product=.*/ro.build.product=""$product""/g" "/$DEFAULTPROP" ;
