@@ -1,6 +1,12 @@
-on early-init
-    mkdir /firmware 0771 system system
+import /init.recovery.qcom_decrypt.rc
 
+on property:ro.build.system_root_image=true
+    # Switch out fstab if built with SAR setup
+    start fstab_swap
+
+on fs && property:ro.build.system_root_image=true
+    # Pie (SAR) update ONLY
+    export ANDROID_ROOT /system_root
 
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
@@ -11,3 +17,9 @@ on boot
     setprop sys.usb.config mtp,adb
     setprop sys.usb.config adb
 
+service fstab_swap /sbin/fstab_swap.sh
+    user root
+    group root
+    oneshot
+    disabled
+    seclabel u:r:recovery:s0
