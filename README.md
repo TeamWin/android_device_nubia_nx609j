@@ -4,7 +4,7 @@ To build:
 
 ```sh
 . build/envsetup.sh
-lunch omni_NX609J-eng
+lunch omni_nx609j-eng
 make recoveryimage
 ```
 
@@ -16,5 +16,6 @@ fastboot flash recovery recovery.img
 ```
 
 NOTE: To build with system-as-root support,
-uncomment the 'BOARD_BUILD_SYSTEM_ROOT_IMAGE := true'
-line in BoardConfig.mk
+replace 'omni_nx609j-eng' in your lunch command
+with 'omni_nx609j_SAR-eng'.
+All other commands remain the same.
