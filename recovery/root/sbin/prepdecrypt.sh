@@ -94,9 +94,9 @@ temp_mount "$TEMPSYS" "system" "$syspath"
 
 if [ -f "$TEMPSYS/$BUILDPROP" ]; then
 	log_info "Build.prop exists! Reading system properties from build.prop..."
+	sdkver=$(grep -i 'ro.build.version.sdk' "$TEMPSYS/$BUILDPROP"  | cut -f2 -d'=' -s)
+	log_info "Current system Android SDK version: $sdkver"
 	if [ "$SETPATCH" = "true" ]; then
-		sdkver=$(grep -i 'ro.build.version.sdk' "$TEMPSYS/$BUILDPROP"  | cut -f2 -d'=' -s)
-		log_info "Current system Android SDK version: $sdkver"
 		if [ "$sdkver" -gt 25 ]; then
 			log_info "Current system is Oreo or above. Proceed with setting OS version and security patch level..."
 			# TODO: It may be better to try to read these from the boot image than from /system
@@ -116,6 +116,31 @@ if [ -f "$TEMPSYS/$BUILDPROP" ]; then
 			fi
 		else
 			log_info "Current system is Nougat or older. Skipping OS version and security patch level setting..."
+		fi
+	else
+		# Be sure to increase the PLATFORM_VERSION in build/core/version_defaults.mk to override
+		# Google's anti-rollback features to something rather insane
+		if [ -n "$osver_orig" ]; then
+			log_info "Original OS version: $osver_orig"
+			log_info "Current OS version: $osver"
+			log_info "Setting OS Version to $osver_orig"
+			osver=$osver_orig
+			resetprop ro.build.version.release "$osver"
+			sed -i "s/ro.build.version.release=.*/ro.build.version.release=""$osver""/g" "/$DEFAULTPROP" ;
+		else
+			log_info "No Original OS Version found. Proceeding with existing value."
+			log_info "Current OS version: $osver"
+		fi
+		if [ -n "$patchlevel_orig" ]; then
+			log_info "Original security patch level: $patchlevel_orig"
+			log_info "Current security patch level: $patchlevel"
+			log_info "Setting security patch level to $patchlevel_orig"
+			patchlevel=$patchlevel_orig
+			resetprop ro.build.version.security_patch "$patchlevel"
+			sed -i "s/ro.build.version.security_patch=.*/ro.build.version.security_patch=""$patchlevel""/g" "/$DEFAULTPROP" ;
+		else
+			log_info "No Original security patch level found. Proceeding with existing value."
+			log_info "Current security patch level: $patchlevel"
 		fi
 	fi
 	# Set additional props from build.prop
