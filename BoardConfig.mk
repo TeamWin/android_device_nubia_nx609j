@@ -77,9 +77,6 @@ BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_COPY_OUT_VENDOR := vendor
 
 # Filesystem
-ifeq ($(TARGET_DEVICE),nx609j_SAR)
-   BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
-endif
 BOARD_HAS_LARGE_FILESYSTEM := true
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
@@ -99,6 +96,7 @@ TW_INCLUDE_CRYPTO := true
 TW_INPUT_BLACKLIST := "hbtp_vm"
 TW_NEW_ION_HEAP := true
 TW_NO_USB_STORAGE := true
+TW_OVERRIDE_SYSTEM_PROPS := "ro.build.fingerprint"
 TARGET_RECOVERY_DEVICE_MODULES := tzdata android.hidl.base@1.0
 TW_RECOVERY_ADDITIONAL_RELINK_FILES := $(OUT)/system/usr/share/zoneinfo/tzdata $(OUT)/system/lib64/android.hidl.base@1.0.so
 

@@ -48,13 +48,8 @@ PRODUCT_SUPPORTS_VERITY_FEC := true
 PRODUCT_VERITY_SIGNING_KEY := build/target/product/security/verity
 
 ## Device identifier. This must come after all inclusions
-ifeq ($(TARGET_PRODUCT),omni_nx609j_SAR)
-   PRODUCT_NAME := omni_nx609j_SAR
-   PRODUCT_DEVICE := nx609j_SAR
-else
-   PRODUCT_NAME := omni_nx609j
-   PRODUCT_DEVICE := nx609j
-endif
+PRODUCT_NAME := omni_nx609j
+PRODUCT_DEVICE := nx609j
 PRODUCT_BRAND := nubia
 PRODUCT_MODEL := NX609J
 PRODUCT_MANUFACTURER := nubia
