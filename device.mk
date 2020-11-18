@@ -17,15 +17,24 @@
 # Sample: This is where we'd set a backup provider if we had one
 # $(call inherit-product, device/sample/products/backup_overlay.mk)
 
-# Inherit from our custom product configuration
-$(call inherit-product, vendor/omni/config/common.mk)
+# Inherit from the common Open Source product configuration
+$(call inherit-product, $(SRC_TARGET_DIR)/product/embedded.mk)
 
-## Device identifier. This must come after all inclusions
-PRODUCT_DEVICE := nx609j
-PRODUCT_NAME := omni_$(PRODUCT_DEVICE)
-PRODUCT_BRAND := nubia
-PRODUCT_MODEL := $(shell echo $(PRODUCT_DEVICE) | tr  '[:lower:]' '[:upper:]')
-PRODUCT_MANUFACTURER := $(PRODUCT_BRAND)
+PRODUCT_AAPT_CONFIG := normal
+PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
-# Inherit from common device configuration
-$(call inherit-product, device/$(PRODUCT_BRAND)/$(PRODUCT_DEVICE)/device.mk)
+PRODUCT_GMS_CLIENTID_BASE := android-zte
+
+PRODUCT_BUILD_PROP_OVERRIDES += \
+   PRODUCT_NAME=NX609J \
+   TARGET_DEVICE=NX609J
+
+PRODUCT_PACKAGES += \
+    qcom_decrypt \
+    tzdata_twrp
+
+# Verity
+PRODUCT_SUPPORTS_BOOT_SIGNER := true
+PRODUCT_SUPPORTS_VERITY := true
+PRODUCT_SUPPORTS_VERITY_FEC := true
+PRODUCT_VERITY_SIGNING_KEY := build/target/product/security/verity

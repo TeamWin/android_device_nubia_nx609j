@@ -8,4 +8,3 @@ on boot
     # Workaround for adb not coming up
     setprop sys.usb.config mtp,adb
     setprop sys.usb.config adb
-
