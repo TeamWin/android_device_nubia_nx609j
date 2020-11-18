@@ -21,8 +21,14 @@
 # definition file).
 #
 
+# OEM Info
+BOARD_VENDOR := nubia
+
+# Default device path
+LOCAL_PATH := device/$(BOARD_VENDOR)/$(TARGET_DEVICE)
+
 # Assert
-TARGET_OTA_ASSERT_DEVICE := NX609J
+TARGET_OTA_ASSERT_DEVICE := $(shell echo $(TARGET_DEVICE) | tr  '[:lower:]' '[:upper:]')
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := MSM8998
@@ -30,7 +36,7 @@ TARGET_NO_BOOTLOADER := true
 TARGET_USES_UEFI := true
 
 # Platform
-TARGET_BOARD_PLATFORM := msm8998
+TARGET_BOARD_PLATFORM := $(shell echo $(TARGET_BOOTLOADER_BOARD_NAME) | tr  '[:upper:]' '[:lower:]')
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno540
 
 # Architecture
@@ -48,20 +54,33 @@ TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a53
 
 # Kernel
-BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 sched_enable_hmp=1 sched_enable_power_aware=1 service_locator.enable=1 swiotlb=2048 androidboot.configfs=true androidboot.usbcontroller=a800000.dwc3
-BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := \
+    androidboot.configfs=true \
+    androidboot.hardware=qcom \
+    androidboot.selinux=permissive \
+    androidboot.usbcontroller=a800000.dwc3 \
+    ehci-hcd.park=3 \
+    lpm_levels.sleep_disabled=1 \
+    msm_rtb.filter=0x37 \
+    sched_enable_hmp=1 \
+    sched_enable_power_aware=1 \
+    service_locator.enable=1 \
+    swiotlb=2048 \
+    user_debug=31
 BOARD_KERNEL_BASE := 0x00000000
+BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 BOARD_RAMDISK_OFFSET     := 0x01000000
-TARGET_PREBUILT_KERNEL := device/nubia/nx609j/prebuilt/kernel_Pie
+TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/prebuilt/$(BOARD_KERNEL_IMAGE_NAME)
 
 # Keymaster 3
 TARGET_HW_DISK_ENCRYPTION := true
+BOARD_USES_QCOM_DECRYPTION := true
 
 # Android version & Security Patch Level
 # Default TWRP Values
-PLATFORM_VERSION := 20.1.0
+PLATFORM_VERSION := 16.1.0
 PLATFORM_SECURITY_PATCH := 2099-12-31
 
 # Partitions
@@ -93,16 +112,17 @@ TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_IGNORE_MISC_WIPE_DATA := true
 TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_CRYPTO_FBE := false
 TW_INPUT_BLACKLIST := "hbtp_vm"
 TW_NEW_ION_HEAP := true
 TW_NO_USB_STORAGE := true
 TW_OVERRIDE_SYSTEM_PROPS := "ro.build.fingerprint"
-TARGET_RECOVERY_DEVICE_MODULES := tzdata android.hidl.base@1.0
-TW_RECOVERY_ADDITIONAL_RELINK_FILES := $(OUT)/system/usr/share/zoneinfo/tzdata $(OUT)/system/lib64/android.hidl.base@1.0.so
+TARGET_RECOVERY_DEVICE_MODULES := android.hidl.base@1.0
+TW_RECOVERY_ADDITIONAL_RELINK_FILES := $(OUT)/system/lib64/android.hidl.base@1.0.so
+#TW_USE_TOOLBOX := true
 
 # TWRP Debug Flags
-#TARGET_USES_LOGD := true
-#TWRP_INCLUDE_LOGCAT := true
-#TARGET_RECOVERY_DEVICE_MODULES += debuggerd
-#TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/bin/debuggerd
-
+TARGET_USES_LOGD := true
+TWRP_INCLUDE_LOGCAT := true
+TARGET_RECOVERY_DEVICE_MODULES += debuggerd
+TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/bin/debuggerd
